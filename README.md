@@ -14,6 +14,9 @@ way. You can use the library part even when still using old opscode's
 or 37signals' cookbook to actually create shell accounts. See "usage"
 section for details.
 
+This cookbook also supports Encrypted data bag support for ssh-keys.
+This requires a databag "secrets", but may be empty
+
 Requirements
 ============
 
@@ -40,8 +43,8 @@ Attributes
 Usage
 =====
 
-Two data bags need to be created: `users` and `groups`. Second one can
-be empty.
+Two data bags need to be created: `users`, `groups` and `secrets`.
+`groups` and `secrets` may be empty.
 
 The users data bag
 ------------------
@@ -78,6 +81,17 @@ Keys recognized:
   inheritance is needed, some other way will be provided.
 
 Arbitrary other keys may be used by other cookbooks.
+
+The secrets data bag
+--------------------
+
+Keys recognized:
+
+* `id` -- should be "ssh-keys"
+* `username` -- username to be setting public ssh-keys for. Value should
+	be array of public ssh-keys for this user.
+
+Arbitrary other keys may be used by other cookbooks. 
 
 The GenericUsers::User class
 ----------------------------

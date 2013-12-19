@@ -33,6 +33,7 @@ end
 
 groups_q = active_groups.map{|g| "groups:#{g}"}.join(' OR ')
 active_users = GenericUsers::User::search("( #{groups_q} ) AND -shell:false")
+keys = Chef::EncryptedDataBagItem.load("secrets", "ssh-keys")
 
 managed_groups = Hash[
   active_users.
@@ -85,7 +86,7 @@ active_users.each do |u|
     owner u[:username]
     group u[:gid] || u[:username]
     mode "0600"
-    variables :ssh_keys => (Array(u['ssh_keys']) | Array(u['ssh_key'])).join("\n")
+    variables :ssh_keys => (Array(keys[u[:username]]) | Array(u['ssh_keys']) | Array(u['ssh_key'])).join("\n")
   end
 end
 
