@@ -75,6 +75,13 @@ active_users.each do |u|
     home home_dir
     notifies :create, "ruby_block[reset group list]", :immediately
   end
+  
+  #create the home directory if it does not exist
+  directory "#{home_dir}" do
+    owner u[:username]
+    group u[:gid] || u[:username]
+    mode "0700"
+  end
 
   directory "#{home_dir}/.ssh" do
     owner u[:username]
