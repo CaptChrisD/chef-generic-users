@@ -56,8 +56,12 @@ active_users.each do |u|
     end
   end
 
-  home_dir = "/home/#{u[:username]}"
-
+  home_dir = if u[:home_dir]
+    "#{u[:home_dir]}/#{u[:username]}"
+  else
+    "/home/#{u[:username]}"
+  end
+  
   # fixes CHEF-1699
   ruby_block "reset group list" do
     block do
@@ -74,13 +78,6 @@ active_users.each do |u|
     supports :manage_home => true
     home home_dir
     notifies :create, "ruby_block[reset group list]", :immediately
-  end
-  
-  #create the home directory if it does not exist
-  directory "#{home_dir}" do
-    owner u[:username]
-    group u[:gid] || u[:username]
-    mode "0700"
   end
 
   directory "#{home_dir}/.ssh" do
