@@ -57,7 +57,7 @@ active_users.each do |u|
   end
 
   home_dir = if u[:home_dir]
-    "#{u[:home_dir]}/#{u[:username]}"
+    "#{u[:home_dir]}"
   else
     "/home/#{u[:username]}"
   end
